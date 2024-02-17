@@ -1,5 +1,5 @@
 name: CustomKits
-version: "${version}"
+version: "1.0.2"
 main: customKits.customkits.CustomKits
 softdepend: [Skript]
 api-version: '1.8.9'

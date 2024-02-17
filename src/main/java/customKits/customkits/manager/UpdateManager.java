@@ -58,7 +58,20 @@ public class UpdateManager {
             String apiUrl = "https://api.github.com/repos/TixDK/CustomKits/releases/latest";
             String currentVersion = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription().getVersion();
 
-            JsonObject json = new Gson().fromJson(new URL(apiUrl).openStream().toString(), JsonObject.class);
+            String token = "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";
+            HttpURLConnection connection = (HttpURLConnection) new URL(apiUrl).openConnection();
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("Authorization", "Bearer " + token);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            StringBuilder response = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            reader.close();
+
+            JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
             String latestVersion = json.get("tag_name").getAsString();
 
             return isNewerVersion(latestVersion, currentVersion);
@@ -67,14 +80,15 @@ public class UpdateManager {
             return false;
         }
     }
-
     private static boolean isNewerVersion(String version1, String version2) {
         String[] parts1 = version1.split("\\.");
         String[] parts2 = version2.split("\\.");
 
-        for (int i = 0; i < Math.min(parts1.length, parts2.length); i++) {
-            int part1 = Integer.parseInt(parts1[i]);
-            int part2 = Integer.parseInt(parts2[i]);
+        int length = Math.max(parts1.length, parts2.length);
+        for (int i = 0; i < length; i++) {
+            int part1 = (i < parts1.length) ? Integer.parseInt(parts1[i]) : 0;
+            int part2 = (i < parts2.length) ? Integer.parseInt(parts2[i]) : 0;
+
             if (part1 > part2) {
                 return true;
             } else if (part1 < part2) {
@@ -82,6 +96,10 @@ public class UpdateManager {
             }
         }
 
-        return parts1.length > parts2.length;
+        return false;
     }
+
+
+
+
 }

@@ -1,17 +1,14 @@
 package customKits.customkits;
 
 import customKits.customkits.CommandHolder.kitCommand;
+import customKits.customkits.Events.Join;
 import customKits.customkits.Extra.*;
 
 import customKits.customkits.manager.UpdateManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -35,6 +32,7 @@ public final class CustomKits extends JavaPlugin {
         kitCommand executor = new kitCommand(this);
         getServer().getPluginManager().registerEvents(new stopDrag(this), this);
         getServer().getPluginManager().registerEvents(new SubAdd(), this);
+        getServer().getPluginManager().registerEvents(new Join(), this);
 
         getCommand("ckit").setExecutor(executor);
 
@@ -113,16 +111,6 @@ public final class CustomKits extends JavaPlugin {
             for (String key : rowSection.getKeys(false)) {
                 int rows = config.getInt("kits." + key + ".rows", 1);
                 kitMenuHolder.put(key, rows);
-            }
-        }
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event){
-        if(UpdateManager.isNewUpdateAvailable()){
-            if(event.getPlayer().isOp()){
-                Player player = event.getPlayer();
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6CustomKits&8] &fDer er en ny version skriv &6/ckit update"));
             }
         }
     }
