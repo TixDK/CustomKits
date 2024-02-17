@@ -1,0 +1,13 @@
+name: CustomKits
+version: "${version}"
+main: customKits.customkits.CustomKits
+softdepend: [Skript]
+api-version: '1.8.9'
+authors:
+  - Itz_Tix
+  - tixdk
+
+commands:
+  ckit:
+    aliases: /customkits
+    description: Custom kits command.

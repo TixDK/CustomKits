@@ -1,0 +1,66 @@
+# +---------------------------------------------------+
+# |                                                   |
+# |           CustomKits Minecraft Plugin             |
+# |                Konfigurationsfil                  |
+# |                 Author: Itz_Tix                   |
+# +---------------------------------------------------+
+
+
+# Basale settings for CustomKits
+
+Settings:
+
+  Basics:
+    Prefix: "&8[&6CustomKits&8]" # Præfiks anvendt i chatbeskeder.
+    Preview-ColorCode: "&6" # Farvekode for preview menuen.
+
+  Kit-Creation:
+    Create-Kit-Permission: "customkits.create" # Permission for at oprette kits.
+    Delete-Kit-Permission: "customkits.delete" # Permission for at slette kits.
+    Reload-Config-Permission: "customkits.reload" # Permission for at reload config.
+    Info-Kit-Permission: "customkits.info" # Permission for at få information.
+    Preview-Kit-Permission: "customkits.info" # Permission for at preview et kit.
+    Edit-Kit-Permission: "customkits.info" # Permission for at preview et kit.
+
+
+
+# ===========================
+# CustomKits Skript-Del
+# ===========================
+
+
+# Måden du giver eller modtager de kits du har oprettet forgår således.
+# Du benytter dig af vores skript-addon hvor vi bruger koden som vist forneden.
+#
+# command /kit [<player>] [<string>]
+#   trigger:
+#     kit give arg-1 with name "%arg-2%"
+
+# Hvis du vil tilføje en timer til et specifikt kit, kan du gøre det via en menu, eller hvordan vil.
+# Du kan gøre som skrevet forneden.
+
+# command /kit [<string>]
+#   trigger:
+#     set {_%arg-1%} to difference between {%arg-1%::kit::%uuid of player%} and now
+#     if {_%arg-1%} is less than [Tid du vælger] minutes:
+#       [Tilføj evt, tekst besked der viser hvor lang tid der er til du kan tage kittet]
+#       send "&fDu skal vente &6%difference between [Valgte tid] minutes and {_%arg-1%}%"
+#       stop
+#     kit give player with name "%arg-1%"
+#     set {%arg-1%::kit::%uuid of player%} to now
+
+# Hvis du vil preview et kit, eller for spillere, så kan du benytte dig af,
+# Dette eksempel som vil blive vist forneden.
+#
+# command [<String>]:
+#   trigger:
+#     create preview for player of kit "%arg-1%"
+# Hvis du så vil tilføje en return knap, fx tilbage til den tidligere menu, så kan du benytte dig af dette.
+#     set return slot 22 of preview to arrow named "&cTilbage"
+
+# player er spilleren den åbner for.
+# "%arg-1%" er det kit som du åbner for spilleren.
+
+
+
+
