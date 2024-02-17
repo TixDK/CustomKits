@@ -1,5 +1,8 @@
 package customKits.customkits;
 
+import customKits.customkits.CommandHolder.kitCommand;
+import customKits.customkits.Extra.*;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -13,8 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static customKits.customkits.kitCommand.kitHolder;
-import static customKits.customkits.kitCommand.kitMenuHolder;
+import static customKits.customkits.CommandHolder.kitCommand.kitHolder;
+import static customKits.customkits.CommandHolder.kitCommand.kitMenuHolder;
 
 public final class CustomKits extends JavaPlugin {
 

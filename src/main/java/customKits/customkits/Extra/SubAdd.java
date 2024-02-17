@@ -1,4 +1,4 @@
-package customKits.customkits;
+package customKits.customkits.Extra;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -6,8 +6,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 
-import static customKits.customkits.kitCommand.editKit;
-import static customKits.customkits.kitCommand.kitMenuHolder;
+import static customKits.customkits.CommandHolder.kitCommand.editKit;
+import static customKits.customkits.CommandHolder.kitCommand.kitMenuHolder;
 
 public class SubAdd implements Listener {
 

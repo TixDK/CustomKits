@@ -1,5 +1,6 @@
-package customKits.customkits;
+package customKits.customkits.CommandHolder;
 
+import customKits.customkits.CustomKits;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,8 +8,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static customKits.customkits.previewKit.previewKitMenu;
+import static customKits.customkits.Skript.previewKit.previewKitMenu;
 
 
 public class kitCommand implements CommandExecutor {
