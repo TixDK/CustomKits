@@ -21,6 +21,7 @@ Settings:
     Info-Kit-Permission: "customkits.info" # Permission for at få information.
     Preview-Kit-Permission: "customkits.info" # Permission for at preview et kit.
     Edit-Kit-Permission: "customkits.info" # Permission for at preview et kit.
+    Update-Permission: "customkits.info" # Permission for at opdatere pluginnet.
 
 
 
