@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static customKits.customkits.Skript.previewKit.previewKitMenu;
+import static customKits.customkits.Extra.previewKit.previewKitMenu;
 
 
 public class kitCommand implements CommandExecutor {
