@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import static customKits.customkits.Extra.previewKit.previewKitMenu;
+import static customKits.customkits.manager.UpdateManager.isNewUpdateAvailable;
+import static customKits.customkits.manager.UpdateManager.nuVersion;
 
 
 public class kitCommand implements CommandExecutor {
@@ -121,10 +123,29 @@ public class kitCommand implements CommandExecutor {
         }
         if(args.length == 1 && args[0].equalsIgnoreCase("update")){
             if (sender.hasPermission(updatePermission)){
-                UpdateManager.update();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fOpdatere til nyeste version."));
+                if(UpdateManager.isNewUpdateAvailable()){
+                    UpdateManager.update();
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fOpdatere til nyeste version."));
+                } else {
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fCustomKits er allerede den nyeste version."));
+                }
             } else {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&8[&6CustomKits&8] &fDu har ikke adgang til dette."));
+            }
+        }
+        if(args.length == 1 && args[0].equalsIgnoreCase("version")){
+            if (sender.hasPermission(infoKitPermission)){
+                String status;
+                if(isNewUpdateAvailable()){
+                    status = "&c✘";
+                } else {
+                    status = "&a✔";
+                }
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fVersion: v" + nuVersion));
+                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fNyeste version: " + status));
+                sender.sendMessage(" ");
+
             }
         }
 

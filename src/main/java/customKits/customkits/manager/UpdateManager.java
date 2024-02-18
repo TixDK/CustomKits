@@ -61,12 +61,13 @@ public class UpdateManager {
 
     private static final String apiUrl = "https://api.github.com/repos/TixDK/CustomKits/releases/latest";
     public static String nyVersion;
+    public static String nuVersion;
 
     public static boolean isNewUpdateAvailable() {
         try {
             String currentVersion = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription().getVersion();
 
-            String token = "--------------------------";
+            String token = "-------------------------------";
             if (token == null || token.isEmpty()) {
                 Bukkit.getLogger().warning("GitHub token is missing. Update check will not be performed.");
                 return false;
@@ -90,6 +91,7 @@ public class UpdateManager {
                 String latestVersion = json.get("tag_name").getAsString();
                 Bukkit.getLogger().info("Version: " + currentVersion + " Ny version " + latestVersion);
                 nyVersion = latestVersion;
+                nuVersion = currentVersion;
                 return isNewerVersion(latestVersion, currentVersion);
             } else {
                 Bukkit.getLogger().warning("Failed to retrieve latest version information from GitHub API. Response code: " + responseCode);

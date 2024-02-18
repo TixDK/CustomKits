@@ -17,7 +17,6 @@ public class Join implements Listener {
         if(UpdateManager.isNewUpdateAvailable()){
             if(event.getPlayer().isOp()){
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6CustomKits&8] &fFandt en ny version af CustomKits v" + nyVersion));
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&ahttps://github.com/TixDK/CustomKits/releases/latest/download/CustomKits.jar"));
             }
         }
     }
