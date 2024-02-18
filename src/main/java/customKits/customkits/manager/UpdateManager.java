@@ -67,7 +67,7 @@ public class UpdateManager {
         try {
             String currentVersion = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription().getVersion();
 
-            String token = "-------------------------------";
+            String token = "--------------------------";
             if (token == null || token.isEmpty()) {
                 Bukkit.getLogger().warning("GitHub token is missing. Update check will not be performed.");
                 return false;

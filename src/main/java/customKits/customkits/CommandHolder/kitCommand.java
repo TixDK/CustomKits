@@ -1,6 +1,7 @@
 package customKits.customkits.CommandHolder;
 
 import customKits.customkits.CustomKits;
+import customKits.customkits.Extra.giveKit;
 import customKits.customkits.manager.UpdateManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -13,10 +14,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static customKits.customkits.Extra.previewKit.previewKitMenu;
 import static customKits.customkits.manager.UpdateManager.isNewUpdateAvailable;
@@ -27,6 +25,8 @@ public class kitCommand implements CommandExecutor {
 
     public static HashMap<String, ArrayList<ItemStack>> kitHolder = new HashMap<>();
     public static HashMap<String, Integer> kitMenuHolder = new HashMap<>();
+    public static HashMap<String, Long> kitCooldown = new HashMap<>();
+    public static Map<String, Map<UUID, Long>> playerkitCooldown = new HashMap<>();
 
     private final CustomKits plugin;
 
@@ -44,13 +44,14 @@ public class kitCommand implements CommandExecutor {
         String previewKitPermission = plugin.getConfig().getString("Settings.Kit-Creation.Preview-Kit-Permission");
         String editKitPermission = plugin.getConfig().getString("Settings.Kit-Creation.Edit-Kit-Permission");
         String updatePermission = plugin.getConfig().getString("Settings.Kit-Creation.Update-Permission");
+        String giveKitPermission = plugin.getConfig().getString("Settings.Kit-Creation.Give-Kit-Permission");
 
         //Variabler
         Player player = (Player) sender;
         ItemStack[] content = player.getInventory().getContents();
 
         //Creation of kits
-        if (args.length == 2 && args[0].equalsIgnoreCase("create") && !args[1].isEmpty()) {
+        if (args.length == 3 && args[0].equalsIgnoreCase("create") && !args[1].isEmpty()) {
             if (player.hasPermission(createKitPermission) && args[0].equals("create")) {
                 if (!kitHolder.containsKey(args[1].toString())) {
                     ArrayList<ItemStack> itemHolder = new ArrayList<>();
@@ -58,9 +59,11 @@ public class kitCommand implements CommandExecutor {
                     for (ItemStack item : content) {
                         itemHolder.add(item);
                     }
+                    Long time = Long.valueOf(args[2]);
+                    kitCooldown.put(nameOfKit, time);
                     kitHolder.put(nameOfKit, itemHolder);
                     kitMenuHolder.put(nameOfKit, 3);
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu oprettede kittet &6&n" + nameOfKit));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu oprettede kittet &6&n" + nameOfKit + "&f med cooldown på &6" + time + "&f sekunder"));
                 } else {
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes allerede."));
                 }
@@ -69,8 +72,12 @@ public class kitCommand implements CommandExecutor {
         if (args.length == 2 && args[0].equalsIgnoreCase("delete") && !args[1].isEmpty()) {
             if (player.hasPermission(deleteKitPermission) && args[0].equals("delete")){
                 if(kitHolder.containsKey(args[1])){
-                    kitHolder.remove(args[1]);
-                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu slettede kittet &6&n" + args[1]));
+                    String nameOfKit = args[1].toString();
+                    kitHolder.remove(nameOfKit);
+                    kitMenuHolder.remove(nameOfKit);
+                    kitCooldown.remove(nameOfKit);
+                    playerkitCooldown.remove(nameOfKit);
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu slettede kittet &6&n" + nameOfKit));
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes ikke."));
                 }
@@ -96,6 +103,18 @@ public class kitCommand implements CommandExecutor {
                     if(kitHolder.containsKey(kit) && kitMenuHolder.containsKey(kit)){
                         editKit(rows, player, kit);
                     }
+                } else {
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes ikke."));
+                }
+            }
+        }
+        if(args.length == 3 && args[0].equalsIgnoreCase("give")){
+            if(player.hasPermission(giveKitPermission)){
+                String kit = args[1];
+                String playerToGetKitString = args[2];
+                Player playerToGetKit = Bukkit.getPlayer(playerToGetKitString);
+                if(kitHolder.containsKey(kit)){
+                    giveKit.directGiveKit(kit, playerToGetKit);
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes ikke."));
                 }
@@ -152,13 +171,15 @@ public class kitCommand implements CommandExecutor {
         if (args.length == 0 && player.hasPermission(infoKitPermission)){
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  " &8&m----------&6 " + prefix + " &8&m----------"));
             sender.sendMessage(" ");
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fOpret kit: &6/ckit create <Navn>"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fOpret kit: &6/ckit create <Navn> <Cooldown>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fSlet kit: &6/ckit delete <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fSe alle kits: &6/ckit list"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fEdit kit: &6/ckit edit <Navn>"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fGiv kit: &6/ckit give <Navn> <Spiller>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fPreview kit: &6/ckit preview <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fReload config: &6/ckit reload"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fOpdater plugin: &6/ckit update"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fPlugin version: &6/ckit version"));
             sender.sendMessage(" ");
         }
         return false;
@@ -203,5 +224,7 @@ public class kitCommand implements CommandExecutor {
         player.openInventory(editKitInv);
         }
     }
+
+
 
 }

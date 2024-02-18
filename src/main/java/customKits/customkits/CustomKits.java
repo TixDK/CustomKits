@@ -11,15 +11,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static customKits.customkits.CommandHolder.kitCommand.kitHolder;
-import static customKits.customkits.CommandHolder.kitCommand.kitMenuHolder;
+import static customKits.customkits.CommandHolder.kitCommand.*;
 
 public final class CustomKits extends JavaPlugin {
 
@@ -40,6 +38,7 @@ public final class CustomKits extends JavaPlugin {
         new giveKit();
         new backSlot();
 
+
     }
 
     @Override
@@ -55,7 +54,22 @@ public final class CustomKits extends JavaPlugin {
             dataFolder.mkdirs();
         }
 
-        FileConfiguration config = YamlConfiguration.loadConfiguration(new File(dataFolder, "kits.yml"));
+
+        File configFile = new File(dataFolder, "kits.yml");
+        if (configFile.exists()) configFile.delete();
+
+        File playerFile = new File(dataFolder, "playerData.yml");
+        if (playerFile.exists()) playerFile.delete();
+
+        try {
+            configFile.createNewFile();
+            playerFile.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
         for (Map.Entry<String, ArrayList<ItemStack>> entry : kitHolder.entrySet()) {
             String kitName = entry.getKey();
             ArrayList<ItemStack> items = entry.getValue();
@@ -63,12 +77,36 @@ public final class CustomKits extends JavaPlugin {
 
             int rows = kitMenuHolder.getOrDefault(kitName, 1);
             config.set("kits." + kitName + ".rows", rows);
+
+            long time = kitCooldown.get(kitName);
+            config.set("kits." + kitName + ".cooldown", time);
+
+
+        }
+        Bukkit.getLogger().info("[CustomKits] Saving player cooldown data.");
+        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(playerFile);
+        for (Map.Entry<String, Map<UUID, Long>> entry : playerkitCooldown.entrySet()) {
+            String kitName = entry.getKey();
+            Map<UUID, Long> cooldownMap = entry.getValue();
+
+            ConfigurationSection cooldownSection = playerConfig.createSection(kitName);
+            for (Map.Entry<UUID, Long> cooldownEntry : cooldownMap.entrySet()) {
+                cooldownSection.set(cooldownEntry.getKey().toString(), cooldownEntry.getValue());
+            }
         }
 
+
         try {
-            config.save(new File(dataFolder, "kits.yml"));
+            config.save(configFile);
+            playerConfig.save(playerFile);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        if(kitHolder.isEmpty()){
+            if(configFile.exists()){
+                configFile.delete();
+            }
         }
     }
 
@@ -81,6 +119,11 @@ public final class CustomKits extends JavaPlugin {
         }
         File file = new File(dataFolder, "kits.yml");
         if (!file.exists()) {
+            return;
+        }
+
+        File dataFile = new File(dataFolder, "playerData.yml");
+        if(!dataFile.exists()){
             return;
         }
 
@@ -113,6 +156,33 @@ public final class CustomKits extends JavaPlugin {
                 kitMenuHolder.put(key, rows);
             }
         }
+
+        ConfigurationSection cooldownSection = config.getConfigurationSection("kits");
+        if (cooldownSection != null) {
+            for (String key : cooldownSection.getKeys(false)) {
+                long time = config.getLong("kits." + key + ".cooldown");
+                kitCooldown.put(key, time);
+            }
+        }
+
+        Bukkit.getLogger().info("[CustomKits] Loading player cooldown data.");
+        FileConfiguration playerConfig = YamlConfiguration.loadConfiguration(dataFile);
+
+        for (String kitName : playerConfig.getKeys(false)) {
+            ConfigurationSection kitCooldowns = playerConfig.getConfigurationSection(kitName);
+            if (kitCooldowns != null) {
+                Map<UUID, Long> cooldownMap = new HashMap<>();
+                for (String playerIdString : kitCooldowns.getKeys(false)) {
+                    UUID playerId = UUID.fromString(playerIdString);
+                    long cooldownTime = kitCooldowns.getLong(playerIdString);
+                    cooldownMap.put(playerId, cooldownTime);
+                }
+                playerkitCooldown.put(kitName, cooldownMap);
+            }
+        }
+
+
+
     }
 
 

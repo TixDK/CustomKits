@@ -22,7 +22,7 @@ Settings:
     Preview-Kit-Permission: "customkits.info" # Permission for at preview et kit.
     Edit-Kit-Permission: "customkits.info" # Permission for at preview et kit.
     Update-Permission: "customkits.info" # Permission for at opdatere pluginnet.
-
+    Give-Kit-Permission: "customkits.info" # Permission for at give kits til andre.
 
 
 # ===========================
@@ -36,19 +36,6 @@ Settings:
 # command /kit [<player>] [<string>]
 #   trigger:
 #     kit give arg-1 with name "%arg-2%"
-
-# Hvis du vil tilføje en timer til et specifikt kit, kan du gøre det via en menu, eller hvordan vil.
-# Du kan gøre som skrevet forneden.
-
-# command /kit [<string>]
-#   trigger:
-#     set {_%arg-1%} to difference between {%arg-1%::kit::%uuid of player%} and now
-#     if {_%arg-1%} is less than [Tid du vælger] minutes:
-#       [Tilføj evt, tekst besked der viser hvor lang tid der er til du kan tage kittet]
-#       send "&fDu skal vente &6%difference between [Valgte tid] minutes and {_%arg-1%}%"
-#       stop
-#     kit give player with name "%arg-1%"
-#     set {%arg-1%::kit::%uuid of player%} to now
 
 # Hvis du vil preview et kit, eller for spillere, så kan du benytte dig af,
 # Dette eksempel som vil blive vist forneden.
