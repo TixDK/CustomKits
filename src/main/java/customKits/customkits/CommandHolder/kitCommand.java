@@ -119,14 +119,7 @@ public class kitCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6CustomKits&8] &fDu har ikke adgang til dette."));
             }
         }
-        if(args.length == 1 && args[0].equalsIgnoreCase("update")){
-            if (sender.hasPermission(updatePermission)){
-                UpdateManager.update();
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fOpdatere til nyeste version."));
-            } else {
-                sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&8[&6CustomKits&8] &fDu har ikke adgang til dette."));
-            }
-        }
+
 
         if (args.length == 0 && player.hasPermission(infoKitPermission)){
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  " &8&m----------&6 " + prefix + " &8&m----------"));
@@ -137,7 +130,6 @@ public class kitCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fEdit kit: &6/ckit edit <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fPreview kit: &6/ckit preview <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fReload config: &6/ckit reload"));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fOpdater plugin: &6/ckit update"));
             sender.sendMessage(" ");
         }
         return false;
