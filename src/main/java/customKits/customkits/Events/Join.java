@@ -7,14 +7,18 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import static customKits.customkits.manager.UpdateManager.nyVersion;
+
 public class Join implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player player = event.getPlayer();
+        player.sendMessage("Nyeste version her!");
         if(UpdateManager.isNewUpdateAvailable()){
             if(event.getPlayer().isOp()){
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6CustomKits&8] &fDer er en ny version skriv &6/ckit update"));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&8[&6CustomKits&8] &fFandt en ny version af CustomKits v" + nyVersion));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&ahttps://github.com/TixDK/CustomKits/releases/latest/download/CustomKits.jar"));
             }
         }
     }
