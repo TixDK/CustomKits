@@ -20,6 +20,45 @@ import java.nio.file.StandardCopyOption;
 
 public class UpdateManager {
 
+    public static final String DownloadURL = "https://github.com/TixDK/CustomKits/releases/latest/download/CustomKits.jar";
+
+    public static void update() {
+        try {
+            PluginDescriptionFile desc = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription();
+            String pluginName = desc.getName();
+            Path pluginFolder = Bukkit.getPluginManager().getPlugin(pluginName).getDataFolder().toPath().getParent();
+            Path pluginFile = pluginFolder.resolve(pluginName + ".jar");
+            Path downloadPath = pluginFolder.resolve("temp_download.jar");
+
+            DownloadFile(new URL(DownloadURL), downloadPath);
+
+            if (Files.exists(downloadPath)) {
+                Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin(pluginName));
+                Files.deleteIfExists(pluginFile);
+                Files.move(downloadPath, pluginFile);
+                Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin(pluginName));
+            } else {
+                Bukkit.getLogger().info("Failed to download new cersion of CustomKits");
+            }
+
+            Bukkit.getLogger().info("CK Path: " + downloadPath);
+            Bukkit.getLogger().info("CK File: " + pluginFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void DownloadFile(URL url, Path path) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        try (InputStream in = connection.getInputStream()) {
+            Files.copy(in, path, StandardCopyOption.REPLACE_EXISTING);
+        } finally {
+            connection.disconnect();
+        }
+    }
+
     private static final String apiUrl = "https://api.github.com/repos/TixDK/CustomKits/releases/latest";
     public static String nyVersion;
 
@@ -27,7 +66,7 @@ public class UpdateManager {
         try {
             String currentVersion = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription().getVersion();
 
-            String token = "--------------------------";
+            String token = "-------------------------";
             if (token == null || token.isEmpty()) {
                 Bukkit.getLogger().warning("GitHub token is missing. Update check will not be performed.");
                 return false;
@@ -63,7 +102,9 @@ public class UpdateManager {
     }
 
     private static boolean isNewerVersion(String version1, String version2) {
+        Bukkit.getLogger().info("Comparing versions: " + version1 + " and " + version2);
         boolean isNewer = version1.compareTo(version2) > 0;
+        Bukkit.getLogger().info("Is version1 newer than version2? " + isNewer);
         return isNewer;
     }
 
