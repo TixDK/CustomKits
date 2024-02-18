@@ -63,9 +63,7 @@ public class UpdateManager {
     }
 
     private static boolean isNewerVersion(String version1, String version2) {
-        Bukkit.getLogger().info("Comparing versions: " + version1 + " and " + version2);
         boolean isNewer = version1.compareTo(version2) > 0;
-        Bukkit.getLogger().info("Is version1 newer than version2? " + isNewer);
         return isNewer;
     }
 
