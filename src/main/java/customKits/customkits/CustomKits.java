@@ -1,17 +1,16 @@
 package customKits.customkits;
 
 import customKits.customkits.CommandHolder.kitCommand;
+import customKits.customkits.Events.Chat;
 import customKits.customkits.Events.Join;
 import customKits.customkits.Extra.*;
 
-import customKits.customkits.manager.UpdateManager;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,11 +30,13 @@ public final class CustomKits extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new stopDrag(this), this);
         getServer().getPluginManager().registerEvents(new SubAdd(), this);
         getServer().getPluginManager().registerEvents(new Join(), this);
+        getServer().getPluginManager().registerEvents(new Chat(), this);
 
         getCommand("ckit").setExecutor(executor);
 
         new previewKit();
         new giveKit();
+        new ForceKit();
         new backSlot();
 
 

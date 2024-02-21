@@ -1,6 +1,7 @@
 package customKits.customkits.CommandHolder;
 
 import customKits.customkits.CustomKits;
+import customKits.customkits.Extra.FormatTime;
 import customKits.customkits.Extra.giveKit;
 import customKits.customkits.manager.UpdateManager;
 import org.bukkit.Bukkit;
@@ -27,6 +28,8 @@ public class kitCommand implements CommandExecutor {
     public static HashMap<String, Integer> kitMenuHolder = new HashMap<>();
     public static HashMap<String, Long> kitCooldown = new HashMap<>();
     public static Map<String, Map<UUID, Long>> playerkitCooldown = new HashMap<>();
+
+    public static Map<UUID, String> editCooldown = new HashMap<>();
 
     private final CustomKits plugin;
 
@@ -59,11 +62,12 @@ public class kitCommand implements CommandExecutor {
                     for (ItemStack item : content) {
                         itemHolder.add(item);
                     }
-                    Long time = Long.valueOf(args[2]);
-                    kitCooldown.put(nameOfKit, time);
+                    String timeStr = args[2];
+                    Long newTime = (long) FormatTime.parseTime(timeStr);
+                    kitCooldown.put(nameOfKit, newTime);
                     kitHolder.put(nameOfKit, itemHolder);
                     kitMenuHolder.put(nameOfKit, 3);
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu oprettede kittet &6&n" + nameOfKit + "&f med cooldown på &6" + time + "&f sekunder"));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu oprettede kittet &6&n" + nameOfKit + "&f med cooldown på &6" + FormatTime.formatTime(newTime)));
                 } else {
                     sender.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes allerede."));
                 }
@@ -95,13 +99,19 @@ public class kitCommand implements CommandExecutor {
                 player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDer er på nuværende tidspunkt ingen kits."));
             }
         }
-        if(args.length == 2 && args[0].equalsIgnoreCase("edit")){
+        if(args.length == 3 && args[0].equalsIgnoreCase("edit")){
             if(player.hasPermission(editKitPermission)){
                 String kit = args[1];
                 if(kitHolder.containsKey(kit)){
                     int rows = kitMenuHolder.get(kit);
                     if(kitHolder.containsKey(kit) && kitMenuHolder.containsKey(kit)){
-                        editKit(rows, player, kit);
+                        if(args[2].equalsIgnoreCase("view")){
+                            editKit(rows, player, kit);
+                        } else if (args[2].equalsIgnoreCase("cooldown")){
+                            UUID playerId = player.getUniqueId();
+                            editCooldown.put(playerId, kit);
+                            player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fSkriv den nye cooldown eller annuller ved &ccancel"));
+                        }
                     }
                 } else {
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDette kit findes ikke."));
@@ -174,7 +184,7 @@ public class kitCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fOpret kit: &6/ckit create <Navn> <Cooldown>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fSlet kit: &6/ckit delete <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fSe alle kits: &6/ckit list"));
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fEdit kit: &6/ckit edit <Navn>"));
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fEdit kit: &6/ckit edit <Navn> <View|Cooldown>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fGiv kit: &6/ckit give <Navn> <Spiller>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&6│ &fPreview kit: &6/ckit preview <Navn>"));
             sender.sendMessage(ChatColor.translateAlternateColorCodes('&',  "&6│ &fReload config: &6/ckit reload"));

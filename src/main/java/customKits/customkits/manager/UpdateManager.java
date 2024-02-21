@@ -36,13 +36,10 @@ public class UpdateManager {
                 Bukkit.getPluginManager().disablePlugin(Bukkit.getPluginManager().getPlugin(pluginName));
                 Files.deleteIfExists(pluginFile);
                 Files.move(downloadPath, pluginFile);
-                Bukkit.getPluginManager().enablePlugin(Bukkit.getPluginManager().getPlugin(pluginName));
             } else {
                 Bukkit.getLogger().info("Failed to download new cersion of CustomKits");
             }
 
-            Bukkit.getLogger().info("CK Path: " + downloadPath);
-            Bukkit.getLogger().info("CK File: " + pluginFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,7 +64,7 @@ public class UpdateManager {
         try {
             String currentVersion = Bukkit.getPluginManager().getPlugin("CustomKits").getDescription().getVersion();
 
-            String token = "--------------------------";
+            String token = "----------------------------";
             if (token == null || token.isEmpty()) {
                 Bukkit.getLogger().warning("GitHub token is missing. Update check will not be performed.");
                 return false;

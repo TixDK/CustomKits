@@ -40,7 +40,7 @@ Settings:
 # Hvis du vil preview et kit, eller for spillere, så kan du benytte dig af,
 # Dette eksempel som vil blive vist forneden.
 #
-# command [<String>]:
+# command /preview [<String>]:
 #   trigger:
 #     create preview for player of kit "%arg-1%"
 # Hvis du så vil tilføje en return knap, fx tilbage til den tidligere menu, så kan du benytte dig af dette.

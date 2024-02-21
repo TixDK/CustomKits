@@ -1,12 +1,7 @@
 package customKits.customkits.Extra;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
-import java.util.Map;
-
-import static customKits.customkits.CommandHolder.kitCommand.kitCooldown;
-import static customKits.customkits.CommandHolder.kitCommand.playerkitCooldown;
 
 public class FormatTime implements Listener {
 
@@ -30,5 +25,37 @@ public class FormatTime implements Listener {
             formattedTime.append(secondsRemain).append(" sekunder ");
         }
         return formattedTime.toString();
+    }
+
+
+    public static int parseTime(String timeString) {
+        int totalSeconds = 0;
+        boolean containsUnit = false;
+
+        String[] parts = timeString.split("[dhms]");
+
+        for (String part : parts) {
+            if (part.length() > 0) {
+                int value = Integer.parseInt(part);
+                if (timeString.contains("d")) {
+                    totalSeconds += value * 24 * 60 * 60;
+                    containsUnit = true;
+                } else if (timeString.contains("h")) {
+                    totalSeconds += value * 60 * 60;
+                    containsUnit = true;
+                } else if (timeString.contains("m")) {
+                    totalSeconds += value * 60;
+                    containsUnit = true;
+                } else if (timeString.contains("s")) {
+                    totalSeconds += value;
+                    containsUnit = true;
+                }
+            }
+        }
+
+        if (!containsUnit) {
+            totalSeconds = Integer.parseInt(timeString);
+        }
+        return totalSeconds;
     }
 }
