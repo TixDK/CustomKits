@@ -1,0 +1,55 @@
+# +---------------------------------------------------+
+# |                                                   |
+# |           CustomKits Minecraft Plugin             |
+# |                Konfigurationsfil                  |
+# |                 Author: Itz_Tix                   |
+# +---------------------------------------------------+
+
+
+# Basale settings for CustomKits
+
+Settings:
+
+  Basics:
+    Prefix: "&8[&6CustomKits&8]" # Præfiks anvendt i chatbeskeder.
+    Preview-ColorCode: "&6" # Farvekode til bredt brug.
+
+  Kit-Creation:
+    Lack-Permission: "&fDu har ikke adgang til dette."
+    Create-Kit-Permission: "customkits.create" # Permission for at oprette kits.
+    Delete-Kit-Permission: "customkits.delete" # Permission for at slette kits.
+    Reload-Config-Permission: "customkits.reload" # Permission for at reload config.
+    Info-Kit-Permission: "customkits.info" # Permission for at få information.
+    Preview-Kit-Permission: "customkits.preview" # Permission for at preview et kit.
+    Edit-Kit-Permission: "customkits.edit" # Permission for at preview et kit.
+    Update-Permission: "customkits.update" # Permission for at opdatere pluginnet.
+    Give-Kit-Permission: "customkits.give" # Permission for at give kits til andre.
+
+  Messages:
+    Kit-Not-Found: "&fDette kit findes ikke."
+    Kit-Already-Exists: "&fDette kit findes allerede."
+    Empty-List: "&fDer findes på nuværende tidspunkt ingen kits."
+    Create-Message: "&fDu oprettede kittet &6{kit} &fmed cooldown &6{cooldown}"
+    Delete-Message: "&fDu selttede kittet &6{kit}"
+    List-Message: "&fDer er følgende kits:&6"
+    Edit-Cooldown: "&fSkriv den nye cooldown, eller annuller ved"
+    Stop-Editing: "&fDu afbrudte ændringen på kittet: &6"
+    Changed-Cooldown: "&fDu satte cooldown til &6{cooldown}&f på kittet &6{kit}"
+    Retake-Kit: "&fDu kan først tage kittet igen om &6"
+
+
+  Time:
+    Days: "Dage"
+    Hours: "Timer"
+    Minutes: "Minutter"
+    Seconds: "Sekunder"
+
+# ===========================
+# CustomKits Skript
+# ===========================
+
+# Få hjælp her: https://github.com/TixDK/CustomKits
+
+
+
+

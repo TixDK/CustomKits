@@ -86,7 +86,6 @@ public class UpdateManager {
 
                 JsonObject json = new Gson().fromJson(response.toString(), JsonObject.class);
                 String latestVersion = json.get("tag_name").getAsString();
-                Bukkit.getLogger().info("Version: " + currentVersion + " Ny version " + latestVersion);
                 nyVersion = latestVersion;
                 nuVersion = currentVersion;
                 return isNewerVersion(latestVersion, currentVersion);
@@ -101,9 +100,7 @@ public class UpdateManager {
     }
 
     private static boolean isNewerVersion(String version1, String version2) {
-        Bukkit.getLogger().info("Comparing versions: " + version1 + " and " + version2);
         boolean isNewer = version1.compareTo(version2) > 0;
-        Bukkit.getLogger().info("Is version1 newer than version2? " + isNewer);
         return isNewer;
     }
 

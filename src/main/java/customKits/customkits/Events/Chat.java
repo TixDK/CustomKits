@@ -1,6 +1,7 @@
 package customKits.customkits.Events;
 
 import customKits.customkits.Extra.FormatTime;
+import customKits.customkits.language.LanguageManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,13 +12,13 @@ import java.util.UUID;
 
 import static customKits.customkits.CommandHolder.kitCommand.editCooldown;
 import static customKits.customkits.CommandHolder.kitCommand.kitCooldown;
-import static customKits.customkits.Extra.stopDrag.plugin;
 
 public class Chat implements Listener {
 
 
-    String prefix = plugin.getConfig().getString("Settings.Basics.Prefix");
-
+    String prefix = LanguageManager.langConfig("Settings.Basics.Prefix");
+    String StopEditing = LanguageManager.langConfig("Settings.Messages.Stop-Editing");
+    String ChangedCooldown = LanguageManager.langConfig("Settings.Messages.Changed-Cooldown");
 
     @EventHandler
     public void onPlayerChat(AsyncPlayerChatEvent event){
@@ -30,13 +31,15 @@ public class Chat implements Listener {
             if(message.equalsIgnoreCase("cancel")){
                 editCooldown.remove(playerID);
                 event.setCancelled(true);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu afbrudte ændringen på kittet &6" + kit));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + StopEditing + kit));
             } else{
                 event.setCancelled(true);
                 Long newTime = (long) FormatTime.parseTime(message);
                 kitCooldown.put(kit, newTime);
                 editCooldown.remove(playerID);
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu satte cooldownen til &6" + FormatTime.formatTime(newTime) + "&fpå kittet " + kit));
+                String EditKit = ChangedCooldown.replace("{kit}", kit);
+                String EditKitCooldown = EditKit.replace("{cooldown}", FormatTime.formatTime(newTime));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + EditKitCooldown));
             }
         }
     }

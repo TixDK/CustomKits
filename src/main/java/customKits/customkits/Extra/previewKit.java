@@ -5,13 +5,17 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import customKits.customkits.language.LanguageManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static customKits.customkits.CommandHolder.kitCommand.kitHolder;
@@ -41,7 +45,8 @@ public class previewKit extends Effect {
 
     public static void previewKitMenu(String kit, Player player){
         int rows = kitMenuHolder.get(kit);
-        String colorCode = plugin.getConfig().getString("Settings.Basics.Preview-ColorCode");
+
+        String colorCode = LanguageManager.langConfig("Settings.Basics.Preview-ColorCode");
         int num = 0;
         kitInv = Bukkit.createInventory(null, rows * 9, ChatColor.translateAlternateColorCodes('&', "&fPreview " + colorCode + kit));
         if (kitHolder.containsKey(kit)) {

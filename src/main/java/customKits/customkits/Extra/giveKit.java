@@ -5,12 +5,16 @@ import ch.njol.skript.lang.Effect;
 import ch.njol.skript.lang.Expression;
 import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
+import customKits.customkits.language.LanguageManager;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +27,6 @@ public class giveKit extends Effect {
 
     private Expression<Player> playerExpr;
     private Expression<String> kitExpr;
-    private static String prefix = plugin.getConfig().getString("Settings.Basics.Prefix");
 
 
     static {
@@ -56,18 +59,14 @@ public class giveKit extends Effect {
         UUID playerID = player.getUniqueId();
         Map<UUID, Long> playerCooldown = playerkitCooldown.getOrDefault(kit, new HashMap<>());
 
+
+        String prefix = LanguageManager.langConfig("Settings.Basics.Prefix");
+        String RetakeKit = LanguageManager.langConfig("Settings.Messages.Retake-Kit");
+
+
         if (playerCooldown.containsKey(playerID)) {
-            long cooldownEndTime = playerCooldown.get(playerID);
-            long currentTimeMillis = System.currentTimeMillis();
-
-            long cooldownSeconds = cooldownEndTime / 1000;
-            long currentTimeSeconds = currentTimeMillis / 1000;
-
-            long cooldown = kitCooldown.get(kit);
-            long timeLeft = (cooldownSeconds + cooldown) - currentTimeSeconds;
-
-            if (timeLeft > 0) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " &fDu kan først tage kittet igen om &6" + FormatTime.formatTime(timeLeft)));
+            if (ReturnTime(player, kit) > 0) {
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + RetakeKit +  FormatTime.formatTime(ReturnTime(player, kit))));
             } else {
                 if (kitHolder.containsKey(kit)) {
                     playerCooldown.put(playerID, System.currentTimeMillis());
@@ -93,6 +92,7 @@ public class giveKit extends Effect {
                 }
             }
         }
+
     }
 
     public static void directGiveKit(String kit, Player player){
@@ -105,6 +105,21 @@ public class giveKit extends Effect {
                 }
             }
         }
+    }
+
+    public static long ReturnTime(Player player, String kit){
+        UUID playerID = player.getUniqueId();
+        Map<UUID, Long> playerCooldown = playerkitCooldown.getOrDefault(kit, new HashMap<>());
+
+        long cooldownEndTime = playerCooldown.get(playerID);
+        long currentTimeMillis = System.currentTimeMillis();
+        long cooldownSeconds = cooldownEndTime / 1000;
+        long currentTimeSeconds = currentTimeMillis / 1000;
+
+        long cooldown = kitCooldown.get(kit);
+        long timeLeft = (cooldownSeconds + cooldown) - currentTimeSeconds;
+
+        return timeLeft;
     }
 
 

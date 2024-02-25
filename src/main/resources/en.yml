@@ -1,0 +1,54 @@
+# +---------------------------------------------------+
+# |                                                   |
+# |           CustomKits Minecraft Plugin             |
+# |                Konfigurationsfil                  |
+# |                 Author: Itz_Tix                   |
+# +---------------------------------------------------+
+
+
+# Basic settings for CustomKits
+
+Settings:
+
+  Basics:
+    Prefix: "&8[&6CustomKits&8]" # Prefix used in chat messages.
+    Preview-ColorCode: "&6" # Colorcode for global use.
+
+  Kit-Creation:
+    Create-Kit-Permission: "customkits.create" # Permission for creation of kits.
+    Delete-Kit-Permission: "customkits.delete" # Permission for deletion of kits.
+    Reload-Config-Permission: "customkits.reload" # Permission for reloading the config.
+    Info-Kit-Permission: "customkits.info" # Permission for getting info.
+    Preview-Kit-Permission: "customkits.preview" # Permission for use of admin preview.
+    Edit-Kit-Permission: "customkits.edit" # Permission for editing kits.
+    Update-Permission: "customkits.update" # Permission for updating the plugin.
+    Give-Kit-Permission: "customkits.give" # Permission to give others a kit.
+
+  Messages:
+    Kit-Not-Found: "&fThis kit doesn't exists"
+    Kit-Already-Exists: "&fThis kit already exists."
+    Empty-List: "&fThere is no kits available."
+    Create-Message: "&fYou created the kit &6{kit} &fwith cooldown &6{cooldown}"
+    Delete-Message: "&fYou deleted kit &6{kit}"
+    List-Message: "&fThere are following kits:&6"
+    Edit-Cooldown: "&fSet the new cooldown, or cancel with"
+    Stop-Editing: "&fYou canceled the change of cooldown for the kit: &6"
+    Changed-Cooldown: "&fYou changed the cooldown to &6{cooldown}&f of the kit &6{kit}"
+    Retake-Kit: "&fThe kit is available in &6"
+
+  Time:
+    Days: "Days"
+    Hours: "Hours"
+    Minutes: "Minutes"
+    Seconds: "Seconds"
+
+
+# ===========================
+# CustomKits Skript
+# ===========================
+
+# Get help here: https://github.com/TixDK/CustomKits
+
+
+
+
