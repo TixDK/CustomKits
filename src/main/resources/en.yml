@@ -35,6 +35,7 @@ Settings:
     Stop-Editing: "&fYou canceled the change of cooldown for the kit: &6"
     Changed-Cooldown: "&fYou changed the cooldown to &6{cooldown}&f of the kit &6{kit}"
     Retake-Kit: "&fThe kit is available in &6"
+    Receive-Kit: "&fYou received kit &6{kit}"
 
   Time:
     Days: "Days"

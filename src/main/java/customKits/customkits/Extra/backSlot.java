@@ -30,6 +30,11 @@ public class backSlot extends Effect {
         ItemStack item = itemExpr.getSingle(event);
         String name = nameExpr.getSingle(event);
 
+        if(slot < 0 || slot >= kitInv.getSize()){
+            Bukkit.getLogger().info("[CustomKits] Preview slot " + slot + " isn't reachable.");
+            return;
+        }
+
         if (item != null && name != null) {
             ItemMeta itemMeta = item.getItemMeta();
             if (itemMeta == null) {

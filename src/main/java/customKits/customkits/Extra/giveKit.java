@@ -62,7 +62,13 @@ public class giveKit extends Effect {
 
         String prefix = LanguageManager.langConfig("Settings.Basics.Prefix");
         String RetakeKit = LanguageManager.langConfig("Settings.Messages.Retake-Kit");
+        String Receive = LanguageManager.langConfig("Settings.Messages.Receive-Kit");
 
+        String getKit = Receive.replace("{kit}", kit);
+
+        if(!kitHolder.containsKey(kit)){
+            return;
+        }
 
         if (playerCooldown.containsKey(playerID)) {
             if (ReturnTime(player, kit) > 0) {
@@ -77,6 +83,7 @@ public class giveKit extends Effect {
                             playerInventory.addItem(item);
                         }
                     }
+                    player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + getKit));
                 }
             }
         } else {
@@ -96,6 +103,9 @@ public class giveKit extends Effect {
     }
 
     public static void directGiveKit(String kit, Player player){
+        if(!kitHolder.containsKey(kit)){
+            return;
+        }
         if (kitHolder.containsKey(kit)) {
             ArrayList<ItemStack> kitItems = kitHolder.get(kit);
             PlayerInventory playerInventory = player.getInventory();

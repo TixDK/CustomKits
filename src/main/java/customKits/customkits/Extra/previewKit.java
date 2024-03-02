@@ -44,6 +44,9 @@ public class previewKit extends Effect {
     }
 
     public static void previewKitMenu(String kit, Player player){
+        if(!kitHolder.containsKey(kit)){
+            return;
+        }
         int rows = kitMenuHolder.get(kit);
 
         String colorCode = LanguageManager.langConfig("Settings.Basics.Preview-ColorCode");
@@ -52,8 +55,10 @@ public class previewKit extends Effect {
         if (kitHolder.containsKey(kit)) {
             ArrayList<ItemStack> kitItems = kitHolder.get(kit);
             for (ItemStack item : kitItems) {
+                int ItemAmount = item.getAmount();
+                ItemStack PlaceItem = new ItemStack(item.getType(), ItemAmount);
                 if (item != null) {
-                    kitInv.setItem(num, item);
+                    kitInv.setItem(num, PlaceItem);
                     num = num + 1;
                 }
             }
