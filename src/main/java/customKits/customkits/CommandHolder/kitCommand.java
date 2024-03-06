@@ -13,6 +13,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -81,7 +82,21 @@ public class kitCommand implements CommandExecutor {
                     ArrayList<ItemStack> itemHolder = new ArrayList<>();
                     String nameOfKit = args[1].toString();
                     for (ItemStack item : content) {
-                        itemHolder.add(item);
+                        if (item != null && item.hasItemMeta()) {
+                            ItemMeta itemMeta = item.getItemMeta();
+                            if (itemMeta != null && itemMeta.hasEnchants()) {
+                                Map<Enchantment, Integer> enchantments = itemMeta.getEnchants();
+                                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                                    Enchantment itemEnchant = entry.getKey();
+                                    int itemEnchantLevel = entry.getValue();
+                                    itemMeta.addEnchant(itemEnchant, itemEnchantLevel, true);
+                                }
+                                item.setItemMeta(itemMeta);
+                                itemHolder.add(item);
+                            }
+                        }else {
+                            itemHolder.add(item);
+                        }
                     }
                     String timeStr = args[2];
                     Long newTime = (long) FormatTime.parseTime(timeStr);

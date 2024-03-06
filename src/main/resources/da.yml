@@ -35,7 +35,7 @@ Settings:
     Edit-Cooldown: "&fSkriv den nye cooldown, eller annuller ved"
     Stop-Editing: "&fDu afbrudte ændringen på kittet: &6"
     Changed-Cooldown: "&fDu satte cooldown til &6{cooldown}&f på kittet &6{kit}"
-    Retake-Kit: "&fDu kan først tage kittet igen om &6"
+    Retake-Kit: "&fDu kan først tage kittet igen om &6{cooldown}"
     Receive-Kit: "&fDu modtog kittet &6{kit}"
 
 

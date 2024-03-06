@@ -7,21 +7,19 @@ import ch.njol.skript.lang.SkriptParser;
 import ch.njol.util.Kleenean;
 import customKits.customkits.language.LanguageManager;
 import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 import static customKits.customkits.CommandHolder.kitCommand.*;
-import static customKits.customkits.Extra.stopDrag.plugin;
 
 public class giveKit extends Effect {
 
@@ -50,7 +48,7 @@ public class giveKit extends Effect {
     }
 
     @Override
-    public String toString(org.bukkit.event.Event event, boolean b){
+    public String toString(Event event, boolean b){
         return "kit give " + playerExpr.toString() + " with name " + kitExpr.toString();
     }
 
@@ -72,15 +70,39 @@ public class giveKit extends Effect {
 
         if (playerCooldown.containsKey(playerID)) {
             if (ReturnTime(player, kit) > 0) {
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + RetakeKit +  FormatTime.formatTime(ReturnTime(player, kit))));
+                String Cooldown = RetakeKit.replace("{cooldown}", FormatTime.formatTime(ReturnTime(player, kit)));
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + Cooldown));
             } else {
                 if (kitHolder.containsKey(kit)) {
                     playerCooldown.put(playerID, System.currentTimeMillis());
                     ArrayList<ItemStack> kitItems = kitHolder.get(kit);
                     PlayerInventory playerInventory = player.getInventory();
+                    ItemMeta itemMeta = null;
                     for (ItemStack item : kitItems) {
-                        if (item != null) {
-                            playerInventory.addItem(item);
+                        ItemStack PlaceItem;
+                        int ItemAmount;
+                        if (item != null ) {
+                            if(item.hasItemMeta()){
+                                itemMeta = item.getItemMeta();
+                                if (itemMeta != null && itemMeta.hasEnchants()) {
+                                    Map<Enchantment, Integer> enchantments = itemMeta.getEnchants();
+                                    for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                                        Enchantment itemEnchant = entry.getKey();
+                                        int itemEnchantLevel = entry.getValue();
+                                        itemMeta.addEnchant(itemEnchant, itemEnchantLevel, true);
+                                    }
+                                }
+                                PlaceItem = new ItemStack(item.getType(), item.getAmount());
+                                PlaceItem.setItemMeta(itemMeta);
+                            } else {
+                                ItemAmount = item.getAmount();
+                                if (ItemAmount > 1) {
+                                    PlaceItem = new ItemStack(item.getType(), ItemAmount);
+                                } else {
+                                    PlaceItem = new ItemStack(item.getType(), 1);
+                                }
+                            }
+                            playerInventory.addItem(PlaceItem);
                         }
                     }
                     player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + getKit));
@@ -92,11 +114,35 @@ public class giveKit extends Effect {
                 playerkitCooldown.put(kit, playerCooldown);
                 ArrayList<ItemStack> kitItems = kitHolder.get(kit);
                 PlayerInventory playerInventory = player.getInventory();
+                ItemMeta itemMeta = null;
                 for (ItemStack item : kitItems) {
-                    if (item != null) {
-                        playerInventory.addItem(item);
+                    ItemStack PlaceItem;
+                    int ItemAmount;
+                    if (item != null ) {
+                        if(item.hasItemMeta()){
+                            itemMeta = item.getItemMeta();
+                            if (itemMeta != null && itemMeta.hasEnchants()) {
+                                Map<Enchantment, Integer> enchantments = itemMeta.getEnchants();
+                                for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                                    Enchantment itemEnchant = entry.getKey();
+                                    int itemEnchantLevel = entry.getValue();
+                                    itemMeta.addEnchant(itemEnchant, itemEnchantLevel, true);
+                                }
+                            }
+                            PlaceItem = new ItemStack(item.getType(), item.getAmount());
+                            PlaceItem.setItemMeta(itemMeta);
+                        } else {
+                            ItemAmount = item.getAmount();
+                            if (ItemAmount > 1) {
+                                PlaceItem = new ItemStack(item.getType(), ItemAmount);
+                            } else {
+                                PlaceItem = new ItemStack(item.getType(), 1);
+                            }
+                        }
+                        playerInventory.addItem(PlaceItem);
                     }
                 }
+                player.sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + " " + getKit));
             }
         }
 
@@ -109,9 +155,32 @@ public class giveKit extends Effect {
         if (kitHolder.containsKey(kit)) {
             ArrayList<ItemStack> kitItems = kitHolder.get(kit);
             PlayerInventory playerInventory = player.getInventory();
+            ItemMeta itemMeta = null;
             for (ItemStack item : kitItems) {
-                if (item != null) {
-                    playerInventory.addItem(item);
+                ItemStack PlaceItem;
+                int ItemAmount;
+                if (item != null ) {
+                    if(item.hasItemMeta()){
+                        itemMeta = item.getItemMeta();
+                        if (itemMeta != null && itemMeta.hasEnchants()) {
+                            Map<Enchantment, Integer> enchantments = itemMeta.getEnchants();
+                            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+                                Enchantment itemEnchant = entry.getKey();
+                                int itemEnchantLevel = entry.getValue();
+                                itemMeta.addEnchant(itemEnchant, itemEnchantLevel, true);
+                            }
+                        }
+                        PlaceItem = new ItemStack(item.getType(), item.getAmount());
+                        PlaceItem.setItemMeta(itemMeta);
+                    } else {
+                        ItemAmount = item.getAmount();
+                        if (ItemAmount > 1) {
+                            PlaceItem = new ItemStack(item.getType(), ItemAmount);
+                        } else {
+                            PlaceItem = new ItemStack(item.getType(), 1);
+                        }
+                    }
+                    playerInventory.addItem(PlaceItem);
                 }
             }
         }
